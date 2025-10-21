@@ -1,9 +1,9 @@
 """
 Recipe Sharing Platform - Flask Web Application
-Student Name: [Your Name Here]
-Class: [Your Class Name and Number]
+Student Name: Brian Shoemaker
+Class: INF601 Mini Project 3
 Project: Flask Web Application - Recipe Sharing Platform
-Date: October 2025
+Date: October 21, 2025
 
 This is a recipe sharing web application that allows users to register, login,
 create recipes, view recipes from other users, and manage their own recipe collection.
