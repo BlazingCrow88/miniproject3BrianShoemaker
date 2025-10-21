@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Recipe Sharing Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row mb-5">
+    <div class="col-lg-12">
+        <div class="p-5 text-center bg-light rounded-3 shadow">
+            <h1 class="display-4 fw-bold">
+                <i class="bi bi-egg-fried text-success"></i>
+                Welcome to Recipe Share
+            </h1>
+            <p class="lead">Discover, share, and save your favorite recipes from around the world</p>
+            {% if not session.user_id %}
+            <div class="mt-4">
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-2">
+                    <i class="bi bi-person-plus"></i> Get Started
+                </a>
+                <a href="{{ url_for('recipes') }}" class="btn btn-outline-success btn-lg">
+                    <i class="bi bi-search"></i> Browse Recipes
+                </a>
+            </div>
+            {% else %}
+            <div class="mt-4">
+                <a href="{{ url_for('add_recipe') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-plus-circle"></i> Share Your Recipe
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mb-5">
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-book display-3 text-success mb-3"></i>
+                <h5 class="card-title">Thousands of Recipes</h5>
+                <p class="card-text">Browse through a vast collection of recipes from home cooks around the world.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-share display-3 text-success mb-3"></i>
+                <h5 class="card-title">Share Your Creations</h5>
+                <p class="card-text">Upload your own recipes and share your culinary expertise with the community.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center">
+                <i class="bi bi-heart display-3 text-success mb-3"></i>
+                <h5 class="card-title">Save Favorites</h5>
+                <p class="card-text">Keep track of your favorite recipes and organize your personal cookbook.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Recipes Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="bi bi-clock-history"></i> Recently Added Recipes
+        </h2>
+    </div>
+</div>
+
+{% if recipes %}
+<div class="row">
+    {% for recipe in recipes %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card recipe-card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <p class="card-text text-muted">{{ recipe.description[:100] }}{% if recipe.description|length > 100 %}...{% endif %}</p>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <small class="text-muted">
+                        <i class="bi bi-person"></i> {{ recipe.author.username }}
+                    </small>
+                    {% if recipe.category %}
+                    <span class="badge bg-success">{{ recipe.category }}</span>
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    {% if recipe.prep_time %}
+                    <small class="text-muted">
+                        <i class="bi bi-clock"></i> {{ recipe.prep_time }} min
+                    </small>
+                    {% endif %}
+                    {% if recipe.servings %}
+                    <small class="text-muted">
+                        <i class="bi bi-people"></i> {{ recipe.servings }} servings
+                    </small>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}" class="btn btn-outline-success btn-sm w-100">
+                    <i class="bi bi-eye"></i> View Recipe
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('recipes') }}" class="btn btn-primary">
+        View All Recipes <i class="bi bi-arrow-right"></i>
+    </a>
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> No recipes yet. Be the first to share a recipe!
+</div>
+{% endif %}
+
+<!-- Call to Action Modal (Bootstrap Modal Example) -->
+<div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="welcomeModalLabel">
+                    <i class="bi bi-star-fill"></i> Welcome to Recipe Share!
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Join our community of food lovers and home chefs!</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-success"></i> Share your favorite recipes</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Discover new dishes</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Connect with fellow food enthusiasts</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Sign Up Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Show welcome modal on first visit (example of Bootstrap modal usage)
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user has seen the welcome modal before
+        if (!localStorage.getItem('welcomeModalShown') && !{{ 'true' if session.user_id else 'false' }}) {
+            var welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
+            welcomeModal.show();
+            localStorage.setItem('welcomeModalShown', 'true');
+        }
+    });
+</script>
+{% endblock %}
