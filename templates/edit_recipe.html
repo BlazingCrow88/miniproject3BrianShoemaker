@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Recipe - Recipe Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0"><i class="bi bi-pencil"></i> Edit Recipe</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe.id) }}" id="editRecipeForm">
+                    <div class="mb-4">
+                        <label for="title" class="form-label fw-bold">
+                            <i class="bi bi-card-heading"></i> Recipe Title *
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="title" 
+                               name="title" 
+                               value="{{ recipe.title }}"
+                               required
+                               maxlength="200">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-bold">
+                            <i class="bi bi-text-paragraph"></i> Description *
+                        </label>
+                        <textarea class="form-control" 
+                                  id="description" 
+                                  name="description" 
+                                  rows="3" 
+                                  required>{{ recipe.description }}</textarea>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="category" class="form-label fw-bold">
+                                <i class="bi bi-tag"></i> Category
+                            </label>
+                            <select class="form-select" id="category" name="category">
+                                <option value="">Select a category...</option>
+                                <option value="Breakfast" {% if recipe.category == 'Breakfast' %}selected{% endif %}>Breakfast</option>
+                                <option value="Lunch" {% if recipe.category == 'Lunch' %}selected{% endif %}>Lunch</option>
+                                <option value="Dinner" {% if recipe.category == 'Dinner' %}selected{% endif %}>Dinner</option>
+                                <option value="Dessert" {% if recipe.category == 'Dessert' %}selected{% endif %}>Dessert</option>
+                                <option value="Snack" {% if recipe.category == 'Snack' %}selected{% endif %}>Snack</option>
+                                <option value="Appetizer" {% if recipe.category == 'Appetizer' %}selected{% endif %}>Appetizer</option>
+                                <option value="Beverage" {% if recipe.category == 'Beverage' %}selected{% endif %}>Beverage</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="servings" class="form-label fw-bold">
+                                <i class="bi bi-people"></i> Servings
+                            </label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="servings" 
+                                   name="servings" 
+                                   value="{{ recipe.servings }}"
+                                   min="1" 
+                                   max="100">
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="prep_time" class="form-label fw-bold">
+                                <i class="bi bi-clock"></i> Prep Time (minutes)
+                            </label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="prep_time" 
+                                   name="prep_time" 
+                                   value="{{ recipe.prep_time }}"
+                                   min="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cook_time" class="form-label fw-bold">
+                                <i class="bi bi-fire"></i> Cook Time (minutes)
+                            </label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="cook_time" 
+                                   name="cook_time" 
+                                   value="{{ recipe.cook_time }}"
+                                   min="0">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="ingredients" class="form-label fw-bold">
+                            <i class="bi bi-basket"></i> Ingredients *
+                        </label>
+                        <textarea class="form-control" 
+                                  id="ingredients" 
+                                  name="ingredients" 
+                                  rows="8" 
+                                  required>{{ recipe.ingredients }}</textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="instructions" class="form-label fw-bold">
+                            <i class="bi bi-list-ol"></i> Instructions *
+                        </label>
+                        <textarea class="form-control" 
+                                  id="instructions" 
+                                  name="instructions" 
+                                  rows="10" 
+                                  required>{{ recipe.instructions }}</textarea>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning btn-lg">
+                            <i class="bi bi-check-circle"></i> Update Recipe
+                        </button>
+                        <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
