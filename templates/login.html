@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Recipe Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-success text-white text-center py-4">
+                <h3><i class="bi bi-box-arrow-in-right"></i> Welcome Back</h3>
+                <p class="mb-0">Login to access your recipes</p>
+            </div>
+            <div class="card-body p-5">
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-4">
+                        <label for="username" class="form-label">
+                            <i class="bi bi-person"></i> Username
+                        </label>
+                        <input type="text" 
+                               class="form-control form-control-lg" 
+                               id="username" 
+                               name="username" 
+                               required
+                               autofocus
+                               placeholder="Enter your username">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock"></i> Password
+                        </label>
+                        <input type="password" 
+                               class="form-control form-control-lg" 
+                               id="password" 
+                               name="password" 
+                               required
+                               placeholder="Enter your password">
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <p class="mb-0">Don't have an account? 
+                    <a href="{{ url_for('register') }}" class="text-decoration-none fw-bold">Register here</a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Demo Account Information -->
+        <div class="card mt-4 border-info">
+            <div class="card-body">
+                <h6 class="card-title text-info">
+                    <i class="bi bi-info-circle-fill"></i> Testing the Application
+                </h6>
+                <p class="card-text small mb-0">
+                    To test the application, register a new account or use any credentials you create during testing.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
