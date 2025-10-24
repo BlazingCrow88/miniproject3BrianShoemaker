@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}All Recipes - Recipe Sharing Platform{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="bi bi-book"></i> All Recipes</h2>
+        <p class="text-muted">Browse through our collection of delicious recipes</p>
+    </div>
+</div>
+
+<!-- Category Filter -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="btn-group" role="group" aria-label="Recipe categories">
+            <a href="{{ url_for('recipes') }}" 
+               class="btn {% if not current_category %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                All Recipes
+            </a>
+            <a href="{{ url_for('recipes', category='Breakfast') }}" 
+               class="btn {% if current_category == 'Breakfast' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Breakfast
+            </a>
+            <a href="{{ url_for('recipes', category='Lunch') }}" 
+               class="btn {% if current_category == 'Lunch' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Lunch
+            </a>
+            <a href="{{ url_for('recipes', category='Dinner') }}" 
+               class="btn {% if current_category == 'Dinner' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Dinner
+            </a>
+            <a href="{{ url_for('recipes', category='Dessert') }}" 
+               class="btn {% if current_category == 'Dessert' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Dessert
+            </a>
+            <a href="{{ url_for('recipes', category='Snack') }}" 
+               class="btn {% if current_category == 'Snack' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Snack
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if recipes %}
+<div class="row">
+    {% for recipe in recipes %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card recipe-card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <p class="card-text text-muted">
+                    {{ recipe.description[:120] }}{% if recipe.description|length > 120 %}...{% endif %}
+                </p>
+                
+                <div class="mb-2">
+                    <small class="text-muted">
+                        <i class="bi bi-person"></i> By {{ recipe.author.username }}
+                    </small>
+                </div>
+                
+                {% if recipe.category %}
+                <div class="mb-2">
+                    <span class="badge bg-success">{{ recipe.category }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        {% if recipe.prep_time %}
+                        <small class="text-muted">
+                            <i class="bi bi-clock"></i> {{ recipe.prep_time }}min prep
+                        </small>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {% if recipe.cook_time %}
+                        <small class="text-muted">
+                            <i class="bi bi-fire"></i> {{ recipe.cook_time }}min cook
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if recipe.servings %}
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="bi bi-people"></i> Serves {{ recipe.servings }}
+                    </small>
+                </div>
+                {% endif %}
+                
+                <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}" 
+                   class="btn btn-outline-success w-100">
+                    <i class="bi bi-eye"></i> View Recipe
+                </a>
+            </div>
+            <div class="card-footer text-muted small">
+                <i class="bi bi-calendar3"></i> Added {{ recipe.created_at.strftime('%b %d, %Y') }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> 
+    {% if current_category %}
+        No recipes found in the {{ current_category }} category.
+    {% else %}
+        No recipes found. Be the first to share a recipe!
+    {% endif %}
+</div>
+{% endif %}
+
+{% if session.user_id %}
+<div class="text-center mt-5">
+    <a href="{{ url_for('add_recipe') }}" class="btn btn-primary btn-lg">
+        <i class="bi bi-plus-circle"></i> Share Your Recipe
+    </a>
+</div>
+{% endif %}
+{% endblock %}
