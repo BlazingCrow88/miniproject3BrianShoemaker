@@ -1,160 +1,123 @@
 {% extends "base.html" %}
 
-{% block title %}Add Recipe - Recipe Sharing Platform{% endblock %}
+{% block title %}All Recipes - Recipe Sharing Platform{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card shadow">
-            <div class="card-header bg-success text-white">
-                <h3 class="mb-0"><i class="bi bi-plus-circle"></i> Share Your Recipe</h3>
-            </div>
-            <div class="card-body p-4">
-                <form method="POST" action="{{ url_for('add_recipe') }}" id="recipeForm">
-                    <div class="mb-4">
-                        <label for="title" class="form-label fw-bold">
-                            <i class="bi bi-card-heading"></i> Recipe Title *
-                        </label>
-                        <input type="text"
-                               class="form-control form-control-lg"
-                               id="title"
-                               name="title"
-                               required
-                               placeholder="e.g., Grandma's Chocolate Chip Cookies"
-                               maxlength="200">
-                    </div>
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="bi bi-book"></i> All Recipes</h2>
+        <p class="text-muted">Browse through our collection of delicious recipes</p>
+    </div>
+</div>
 
-                    <div class="mb-4">
-                        <label for="description" class="form-label fw-bold">
-                            <i class="bi bi-text-paragraph"></i> Description *
-                        </label>
-                        <textarea class="form-control"
-                                  id="description"
-                                  name="description"
-                                  rows="3"
-                                  required
-                                  placeholder="Brief description of your recipe..."></textarea>
-                        <div class="form-text">A short summary that will entice others to try your recipe</div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label for="category" class="form-label fw-bold">
-                                <i class="bi bi-tag"></i> Category
-                            </label>
-                            <select class="form-select" id="category" name="category">
-                                <option value="">Select a category...</option>
-                                <option value="Breakfast">Breakfast</option>
-                                <option value="Lunch">Lunch</option>
-                                <option value="Dinner">Dinner</option>
-                                <option value="Dessert">Dessert</option>
-                                <option value="Snack">Snack</option>
-                                <option value="Appetizer">Appetizer</option>
-                                <option value="Beverage">Beverage</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="servings" class="form-label fw-bold">
-                                <i class="bi bi-people"></i> Servings
-                            </label>
-                            <input type="number"
-                                   class="form-control"
-                                   id="servings"
-                                   name="servings"
-                                   min="1"
-                                   max="100"
-                                   placeholder="e.g., 4">
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label for="prep_time" class="form-label fw-bold">
-                                <i class="bi bi-clock"></i> Prep Time (minutes)
-                            </label>
-                            <input type="number"
-                                   class="form-control"
-                                   id="prep_time"
-                                   name="prep_time"
-                                   min="0"
-                                   placeholder="e.g., 15">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="cook_time" class="form-label fw-bold">
-                                <i class="bi bi-fire"></i> Cook Time (minutes)
-                            </label>
-                            <input type="number"
-                                   class="form-control"
-                                   id="cook_time"
-                                   name="cook_time"
-                                   min="0"
-                                   placeholder="e.g., 30">
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="ingredients" class="form-label fw-bold">
-                            <i class="bi bi-basket"></i> Ingredients *
-                        </label>
-                        <textarea class="form-control"
-                                  id="ingredients"
-                                  name="ingredients"
-                                  rows="8"
-                                  required
-                                  placeholder="List each ingredient on a new line:
-• 2 cups all-purpose flour
-• 1 cup sugar
-• 1/2 cup butter, softened
-• 2 eggs"></textarea>
-                        <div class="form-text">List each ingredient on a separate line</div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="instructions" class="form-label fw-bold">
-                            <i class="bi bi-list-ol"></i> Instructions *
-                        </label>
-                        <textarea class="form-control"
-                                  id="instructions"
-                                  name="instructions"
-                                  rows="10"
-                                  required
-                                  placeholder="Write detailed step-by-step instructions:
-1. Preheat oven to 350°F (175°C).
-2. Mix flour and sugar in a bowl.
-3. Add butter and eggs, mix until combined.
-4. ..."></textarea>
-                        <div class="form-text">Provide clear, step-by-step instructions</div>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-check-circle"></i> Submit Recipe
-                        </button>
-                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle"></i> Cancel
-                        </a>
-                    </div>
-                </form>
-            </div>
+<!-- Category Filter -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="btn-group" role="group" aria-label="Recipe categories">
+            <a href="{{ url_for('recipes') }}"
+               class="btn {% if not current_category %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                All Recipes
+            </a>
+            <a href="{{ url_for('recipes', category='Breakfast') }}"
+               class="btn {% if current_category == 'Breakfast' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Breakfast
+            </a>
+            <a href="{{ url_for('recipes', category='Lunch') }}"
+               class="btn {% if current_category == 'Lunch' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Lunch
+            </a>
+            <a href="{{ url_for('recipes', category='Dinner') }}"
+               class="btn {% if current_category == 'Dinner' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Dinner
+            </a>
+            <a href="{{ url_for('recipes', category='Dessert') }}"
+               class="btn {% if current_category == 'Dessert' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Dessert
+            </a>
+            <a href="{{ url_for('recipes', category='Snack') }}"
+               class="btn {% if current_category == 'Snack' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                Snack
+            </a>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-    // Form validation feedback
-    document.getElementById('recipeForm').addEventListener('submit', function(event) {
-        const title = document.getElementById('title').value.trim();
-        const description = document.getElementById('description').value.trim();
-        const ingredients = document.getElementById('ingredients').value.trim();
-        const instructions = document.getElementById('instructions').value.trim();
+{% if recipes %}
+<div class="row">
+    {% for recipe in recipes %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card recipe-card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <p class="card-text text-muted">
+                    {{ recipe.description[:120] }}{% if recipe.description|length > 120 %}...{% endif %}
+                </p>
 
-        if (!title || !description || !ingredients || !instructions) {
-            event.preventDefault();
-            alert('Please fill in all required fields (marked with *)');
-            return false;
-        }
-    });
-</script>
+                <div class="mb-2">
+                    <small class="text-muted">
+                        <i class="bi bi-person"></i> By {{ recipe.author.username }}
+                    </small>
+                </div>
+
+                {% if recipe.category %}
+                <div class="mb-2">
+                    <span class="badge bg-success">{{ recipe.category }}</span>
+                </div>
+                {% endif %}
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        {% if recipe.prep_time %}
+                        <small class="text-muted">
+                            <i class="bi bi-clock"></i> {{ recipe.prep_time }}min prep
+                        </small>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {% if recipe.cook_time %}
+                        <small class="text-muted">
+                            <i class="bi bi-fire"></i> {{ recipe.cook_time }}min cook
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if recipe.servings %}
+                <div class="mb-3">
+                    <small class="text-muted">
+                        <i class="bi bi-people"></i> Serves {{ recipe.servings }}
+                    </small>
+                </div>
+                {% endif %}
+
+                <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}"
+                   class="btn btn-outline-success w-100">
+                    <i class="bi bi-eye"></i> View Recipe
+                </a>
+            </div>
+            <div class="card-footer text-muted small">
+                <i class="bi bi-calendar3"></i> Added {{ recipe.created_at.strftime('%b %d, %Y') }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i>
+    {% if current_category %}
+        No recipes found in the {{ current_category }} category.
+    {% else %}
+        No recipes found. Be the first to share a recipe!
+    {% endif %}
+</div>
+{% endif %}
+
+{% if session.user_id %}
+<div class="text-center mt-5">
+    <a href="{{ url_for('add_recipe') }}" class="btn btn-primary btn-lg">
+        <i class="bi bi-plus-circle"></i> Share Your Recipe
+    </a>
+</div>
+{% endif %}
 {% endblock %}
